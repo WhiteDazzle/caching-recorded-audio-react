@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useReactMediaRecorder } from "react-media-recorder";
+
+const getBlob = async (url:any) => {
+    let blob = await fetch(url).then(r => r.blob());
+    console.log(blob.arrayBuffer())
+}
 
 function App() {
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+      useReactMediaRecorder({ audio: true });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <p>{status}</p>
+        <button onClick={startRecording}>Start Recording</button>
+        <button onClick={stopRecording}>Stop Recording</button>
+        <audio src={mediaBlobUrl} controls/>
+          <p> {mediaBlobUrl} </p>
+          <button onClick={()=> getBlob(mediaBlobUrl)}>getBlob</button>
+      </div>
   );
 }
 
