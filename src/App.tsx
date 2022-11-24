@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import { useReactMediaRecorder } from "react-media-recorder";
 
-function getBlobFromBase64Data(b64Data:any, contentType:any, sliceSize=512) {
+function getBlobFromBase64Data(b64Data:string, contentType:string, sliceSize=512) {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
 
@@ -22,7 +22,7 @@ function getBlobFromBase64Data(b64Data:any, contentType:any, sliceSize=512) {
     return blob;
 }
 
-const convert = function (audioFileData: any, targetFormat: string) {
+const convert = function (audioFileData: File, targetFormat: string) {
     try {
         targetFormat = targetFormat.toLowerCase();
         let reader = new FileReader();
@@ -50,7 +50,7 @@ const convert = function (audioFileData: any, targetFormat: string) {
     }
 }
 
-const getMP3 = async (url:any) => {
+const getMP3 = async (url:string)=> {
     let blob = await fetch(url).then(r => r.blob()).then(blob => {
         const file = new File([blob], "foo.x-wav", {
             type: "audio/x-wav",
@@ -60,9 +60,15 @@ const getMP3 = async (url:any) => {
     return blob
 }
 
+type typeFile = {
+    data: string;
+    name: string;
+    format: string;
+}
+
 function App() {
     const [linkMP3, setLinkMP3] = useState('')
-    const { status, startRecording, stopRecording, mediaBlobUrl } =
+    const { status, startRecording, stopRecording, mediaBlobUrl='' } =
         useReactMediaRecorder({ audio: true });
     const handleCreateMP3 = async () => {
         const fileMP3:any = await getMP3(mediaBlobUrl)
