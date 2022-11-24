@@ -30,6 +30,7 @@ const convert = function (audioFileData: any, targetFormat: string) {
             reader.onload = function (event) {
                 let contentType = 'audio/'+targetFormat;
                 console.log(event)
+                //@ts-ignore
                 let data = event.target.result.split(',');
                 let b64Data = data[1];
                 let blob = getBlobFromBase64Data(b64Data, contentType);
